@@ -32,6 +32,75 @@ exports.login = async (req, res) => {
     }
 };
 
-exports.getProfile = (req, res) => {
-    res.json({ user: req.user });
+exports.getProfile = async (req, res) => {
+    try {
+        const { _id } = req.params;
+
+        const user = await User.findOne({ _id });
+        if (!user) {
+            return res.status(404).json({ 
+                essage: 'User not found' 
+            });
+        }
+        res.status(200).json(user);
+    } catch (err) {
+        res.status(400).json({ 
+            message: 'Error fetching user details', 
+            error: err.message 
+        });
+    }
+};
+
+exports.updateSetting = async(req, res) =>{ 
+    try {
+        const { _id, username, oldPassword, newPassword } = req.body;
+        console.log("username: " + username, " / ", "Old Password: " + oldPassword, " / ", "New Password: " + newPassword);
+
+        const user = await User.findOne({ _id });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ 
+                message: 'Incorrect old password' 
+            });
+        }
+
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+        await User.findOneAndUpdate({ username }, { password: hashedNewPassword });
+
+        res.status(200).json({ 
+            message: 'User password updated successfully' 
+        });
+    } catch (err) {
+        res.status(400).json({ 
+            message: 'Error changing user password', 
+            error: err.message 
+        });
+    }
+};
+
+
+exports.deleteUser = async (req, res) => {
+    try {
+        const { _id } = req.params;
+
+        const user = await User.findOneAndDelete({ _id });
+        if (!user) {
+            return res.status(404).json({ 
+                message: 'User not found' 
+            });
+        }
+        res.status(200).json({ 
+            message: 'User deleted successfully' 
+        });
+    } catch (err) {
+        res.status(400).json({ 
+            message: 'Error deleting user', 
+            error: err.message 
+        });
+    }
 };
