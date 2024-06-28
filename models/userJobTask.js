@@ -18,7 +18,7 @@ const jobTaskSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true,
-        enum: ['board', 'todo', 'inprogress', 'completed'],
+        enum: ['backlog', 'todo', 'inprogress', 'done'],
         default: 'todo'
     },
     assignedTo: {
