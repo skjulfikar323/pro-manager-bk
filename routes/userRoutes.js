@@ -15,6 +15,15 @@ router.post('/login', userController.login);
 // router.post('/deleteTask', auth, userTask.deleteTask);
 
 
+router.post('/getAllBacklogTask', userTask.getAllBacklogTask);
+router.post('/getAllToDoTasks', userTask.getAllToDoTasks);
+router.post('/getAllInProcess', userTask.getAllInProcess);
+router.post('/getAllompletedTask', userTask.getAllompletedTask);
+router.post('/getAllLowPriorityTask', userTask.getAllLowPriorityTask);
+router.post('getAllModeratePriorityTask', userTask.getAllModeratePriorityTask);
+router.post('getAllDueDateTask', userTask.getAllDueDateTask);
+router.post('/getAllHighPriorityTask', userTask.getAllHighPriorityTask);
+
 router.post('/getAllTask', userTask.getAllTask);
 router.post('/getAllTaskById', userTask.getAllTaskById);
 router.post('/getAllTaskByDate', userTask.getAllTaskByDate);
